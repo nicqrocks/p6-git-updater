@@ -3,10 +3,12 @@ use Hiker::Model;
 
 
 class MyApp::Overview does Hiker::Model {
-    has $.path = '/home/nic/git_repos/git-updater';
+    has $.config = "../config".IO;
 
     method bind($req, $res) {
-        $res.data<path> = $.path || 'foo/bar';
-        $res.data<project> = $.path.IO.basename;
+        my @repos = gather {
+            
+        }
+        $res.data<project> = @!paths || 'None Found';
     }
 }

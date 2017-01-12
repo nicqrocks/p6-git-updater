@@ -1,6 +1,14 @@
 <html DOCTYPE>
 <body>
     <h1>Git Updater<h1>
-    <h2>Project: {{project}}</h2>
+    {{#project}}
+        <h2>Project: {{name}}</h2>
+        <h3>{{description}}</h3>
+        <p>On commit {{commit}} by {{author}}</p>
+        <pre>
+            {{message}}
+        </pre>
+        <p><a href={{url}}>More info</a></p>
+    {{/project}}
 </body>
 </html>
