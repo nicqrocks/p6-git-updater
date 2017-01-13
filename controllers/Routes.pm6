@@ -1,10 +1,10 @@
 
 use Hiker::Route;
 
-class MyApp::Overview does Hiker::Route {
+class MyApp::Route::Overview does Hiker::Route {
     has $.path     = '/';
     has $.template = 'Overview.mustache';
-    has $.model    = 'MyApp::Overview';
+    has $.model    = 'MyApp::Model::Overview';
 
     method handler($req, $res) {
         $res.headers<Content-Type> = 'text/html';
@@ -12,10 +12,10 @@ class MyApp::Overview does Hiker::Route {
 }
 
 
-class MyApp::Update does Hiker::Route {
+class MyApp::Route::Update does Hiker::Route {
     has $.path     = '/update/:project';
     has $.template = 'Update.mustache';
-    has $.model    = 'MyApp::Update';
+    has $.model    = 'MyApp::Model::Update';
 
     method handler($req, $res) {
         $res.headers<Content-Type> = 'text/html';
@@ -23,7 +23,7 @@ class MyApp::Update does Hiker::Route {
 }
 
 
-class MyApp::Error does Hiker::Route {
+class MyApp::Route::Error does Hiker::Route {
     has $.path      = /.*/;
     has $.template  = '404.mustache';
 
