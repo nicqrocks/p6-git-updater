@@ -21,13 +21,3 @@ class MyApp::Route::Update does Hiker::Route {
         $res.headers<Content-Type> = 'text/html';
     }
 }
-
-
-class MyApp::Route::Error does Hiker::Route {
-    has $.path      = /.*/;
-    has $.template  = '404.mustache';
-
-    method handler($req, $res) {
-        $res.headers<Content-Type> = 'text/plain';
-    }
-}
