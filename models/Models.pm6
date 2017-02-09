@@ -4,7 +4,7 @@ use Git::Wrapper;
 
 #Sub to pull the local list of git repos, and return them as a list.
 sub get-repos() {
-    my $config = "{$*PROGRAM.dirname}/config";
+    my $config = "{$*PROGRAM.dirname}/repos.conf";
 
     return gather {
         for slurp($config).lines {
