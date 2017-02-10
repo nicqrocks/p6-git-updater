@@ -41,7 +41,7 @@ class MyApp::Model::Overview does Hiker::Model {
             }
 
             #Get the last log entry.
-            given $git.log[0] {
+            given $git.log(:max-count(1)).first {
                 %proj<commit> = .sha1;
                 %proj<author> = .author;
                 %proj<message> = .message;
