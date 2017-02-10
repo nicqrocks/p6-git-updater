@@ -66,7 +66,7 @@ class MyApp::Model::Update does Hiker::Model {
     method bind($req, $res) {
         #Look for the repo to update.
         my $search = $req.params<project>;
-        my @repos = get-repos>>.lc.grep: / $search /;
+        my @repos = get-repos.grep: /:i $search /;
 
         #Unless one repo returns, return an error.
         given @repos.elems {
