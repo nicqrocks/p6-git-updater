@@ -82,10 +82,12 @@ class MyApp::Model::Update does Hiker::Model {
             }
         }
 
-        #Looks like we found the right repo to update.
-        my $git = Git::Wrapper.new: gitdir => @repos.first;
-        #Pull from the origin.
-        $git.pull;
-        $res.data<name> = $git.gitdir.basename;
+        $res.data<name> = @repos.first.basename;
+        start {
+            #Looks like we found the right repo to update.
+            my $git = Git::Wrapper.new: gitdir => @repos.first;
+            #Pull from the origin.
+            $git.pull;
+        }
     }
 }
