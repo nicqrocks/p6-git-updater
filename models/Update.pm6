@@ -12,16 +12,13 @@ class Model::Update does Hiker::Model {
         my @repos = get-repos.grep: /:i $search /;
 
         #Unless one repo returns, return an error.
-        given @repos.elems {
+        unless @repos.elems == 1 {
             $res.data<name> = $search;
-            when * > 1 {
-                $res.data<error> = "Too many repos match that name";
-                return;
-            }
-            when * < 1 {
-                $res.data<error> = "No repos match that name";
-                return;
-            }
+            $res.data<error> = @repos.elems > 1
+                ?? "Too many repos match that name"
+                !! "No repos match that name";
+            $res.status = 404;
+            return;
         }
 
         $res.data<name> = @repos.first.basename;
