@@ -1,6 +1,6 @@
-<html DOCTYPE>
+<!DOCTYPE html>
 <body>
-    <h1>Git Updater<h1>
+    <h1>Git Updater</h1>
     {{#project}}
         <h2>Project: {{name}}</h2>
         <h3>{{description}}</h3>
@@ -8,7 +8,7 @@
         <pre>
             {{message}}
         </pre>
-        {{#has_remote}}<p><a href={{url}}>More info</a></p>{{/has_remote}}
+        {{#has_remote}}<p><a href="{{origin}}">More info</a></p>{{/has_remote}}
         <hr />
     {{/project}}
 </body>

@@ -30,7 +30,10 @@ class MyApp::Model::Overview does Hiker::Model {
             %proj<name> = $_.basename;
             #The project description if available.
             try {
-                %proj<description> = slurp("$_/README.md").lines[2..3];
+                given slurp("$_/README.md").lines[1..3] {
+                    when / [\w+]+ % \s+ / { %proj<description> = $/.Str }
+                }
+                # %proj<description> = slurp("$_/README.md").lines[1..3];
 
                 CATCH {
                     default { %proj<description> = 'No Description'; }
@@ -45,9 +48,10 @@ class MyApp::Model::Overview does Hiker::Model {
             }
 
             #Get the origin URL if it exists.
-            if $git.run("remote", :v) -> $r {
+            my $url = $git.run("config", "remote.origin.url").chomp;
+            if $url -> $r {
                 %proj<has_remote> = True;
-                %proj<URL> = $r.split(/\s+/)[1] if $r ~~ /"fetch"/;
+                %proj<origin> = $r;
             }
 
             #Return the info gathered.
