@@ -63,7 +63,29 @@ class MyApp::Model::Overview does Hiker::Model {
 
 #Update one of the git repos.
 class MyApp::Model::Update does Hiker::Model {
-  method bind($req, $res) {
-    $res.data<who> = 'web!';
-  }
+    method bind($req, $res) {
+        #Look for the repo to update.
+        my $search = $req.params<project>;
+        my @repos = get-repos>>.lc.grep: / $search /;
+
+        #Unless one repo returns, return an error.
+        given @repos.elems {
+            when * > 1 {
+                $res.data<name> = $search;
+                $res.data<error> = "Too many repos match that name";
+                return;
+            }
+            when * < 1 {
+                $res.data<name> = $search;
+                $res.data<error> = "No repos match that name";
+                return;
+            }
+        }
+
+        #Looks like we found the right repo to update.
+        my $git = Git::Wrapper.new: gitdir => @repos.first;
+        #Pull from the origin.
+        $git.pull;
+        $res.data<name> = $git.gitdir.basename;
+    }
 }
