@@ -17,7 +17,7 @@ sub get-repos() {
 
 
 #Have a general overview of the git repos.
-class MyApp::Model::Overview does Hiker::Model {
+class Model::Overview does Hiker::Model {
     method bind($req, $res) {
         for get-repos() {
             #Wrap git around the given dir.
@@ -62,7 +62,7 @@ class MyApp::Model::Overview does Hiker::Model {
 
 
 #Update one of the git repos.
-class MyApp::Model::Update does Hiker::Model {
+class Model::Update does Hiker::Model {
     method bind($req, $res) {
         #Look for the repo to update.
         my $search = $req.params<project>;
