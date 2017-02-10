@@ -1,20 +1,8 @@
 
 use Hiker::Model;
 use Git::Wrapper;
-
-#Sub to pull the local list of git repos, and return them as a list.
-sub get-repos() {
-    my $config = "{$*PROGRAM.dirname}/repos.conf";
-
-    return gather {
-        for slurp($config).lines {
-            when /^ '#' .* / { } #Comment, so ignore.
-            when .IO.d { take .IO; }
-            default { say "{.Str} is not a valid path"; }
-        }
-    }.cache;
-}
-
+use lib 'lib';
+use Utils;
 
 #Have a general overview of the git repos.
 class Model::Overview does Hiker::Model {
@@ -33,8 +21,6 @@ class Model::Overview does Hiker::Model {
                 given slurp("$_/README.md").lines[1..3] {
                     when / [\w+]+ % \s+ / { %proj<description> = $/.Str }
                 }
-                # %proj<description> = slurp("$_/README.md").lines[1..3];
-
                 CATCH {
                     default { %proj<description> = 'No Description'; }
                 }
@@ -56,38 +42,6 @@ class Model::Overview does Hiker::Model {
 
             #Return the info gathered.
             $res.data<project>.push: %proj;
-        }
-    }
-}
-
-
-#Update one of the git repos.
-class Model::Update does Hiker::Model {
-    method bind($req, $res) {
-        #Look for the repo to update.
-        my $search = $req.params<project>;
-        my @repos = get-repos.grep: /:i $search /;
-
-        #Unless one repo returns, return an error.
-        given @repos.elems {
-            when * > 1 {
-                $res.data<name> = $search;
-                $res.data<error> = "Too many repos match that name";
-                return;
-            }
-            when * < 1 {
-                $res.data<name> = $search;
-                $res.data<error> = "No repos match that name";
-                return;
-            }
-        }
-
-        $res.data<name> = @repos.first.basename;
-        start {
-            #Looks like we found the right repo to update.
-            my $git = Git::Wrapper.new: gitdir => @repos.first;
-            #Pull from the origin.
-            $git.pull;
         }
     }
 }
