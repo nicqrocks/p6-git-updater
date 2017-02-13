@@ -1,15 +1,22 @@
 <!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="/style.css">
+</head>
 <body>
     <h1>Git Updater</h1>
-    {{#project}}
-        <h2>Project: {{name}}</h2>
-        <h3>{{description}}</h3>
-        <p>On commit {{commit}} by {{author}}</p>
-        <pre>
-            {{message}}
-        </pre>
-        {{#has_remote}}<p><a href="{{origin}}">Origin</a></p>{{/has_remote}}
+    <div class="repos">
+        {{#project}}
+        <div class="repo">
+            <h2>Repo: {{name}}</h2>
+            <h3>{{description}}</h3>
+            <p>On commit {{commit}} by {{author}}</p>
+            <pre>
+                {{message}}
+            </pre>
+            {{#has_remote}}<p><a href="{{origin}}">Origin</a></p>{{/has_remote}}
+        </div>
         <hr />
-    {{/project}}
+        {{/project}}
+    </div>
 </body>
 </html>

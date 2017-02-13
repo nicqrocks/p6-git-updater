@@ -21,3 +21,26 @@ class Route::Update does Hiker::Route {
         $res.headers<Content-Type> = 'text/html';
     }
 }
+
+class Route::CSS does Hiker::Route {
+    has $.path     = '/:style';
+    has $.template = 'css.mustache';
+
+    method handler($req, $res) {
+        $res.headers<Content-Type> = 'text/css';
+
+        my %style;
+        %style<normal> = {
+                padding_small   => 5,
+                padding_large   => 15,
+                repos_width     => 90,
+                color_bg        => "white",
+                color_header    => "#2c3e50",
+                color_repo      => "#bdc3c7",
+        };
+
+        my $scheme = $req.params<style> // "normal";
+        $scheme = "normal" unless ?%style{"$scheme"};
+        $res.data.append: %style{"$scheme"}.pairs;
+    }
+}
