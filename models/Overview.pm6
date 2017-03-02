@@ -7,18 +7,18 @@ use Utils;
 #Have a general overview of the git repos.
 class Model::Overview does Hiker::Model {
     method bind($req, $res) {
-        for get-repos() {
+        for get-repos() -> $repo {
             #Wrap git around the given dir.
-            my $git = Git::Wrapper.new: gitdir => $_;
+            my $git = Git::Wrapper.new: gitdir => $repo;
             #Hash to store the projects data.
             my %proj;
 
             #Store data about the project and return it.
             #The name of the project.
-            %proj<name> = $_.basename;
+            %proj<name> = $repo.basename;
             #The project description if available.
             try {
-                given slurp("$_/README.md").lines[1..3] {
+                given slurp("$repo/README.md").lines[1..3] {
                     when / [\w+]+ % \s+ / { %proj<description> = $/.Str }
                 }
                 CATCH {
