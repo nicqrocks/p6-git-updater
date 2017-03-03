@@ -2,7 +2,6 @@
 #Use the JSON::Fast module to read the JSON file
 use JSON::Tiny;
 
-unit module Utils;
 #This will hold any utility functions that will be used with the models.
 
 #Look for files within a given dir.
