@@ -17,11 +17,11 @@ When cloning or downloading this repo, you will find a file called `example.json
 {
     "repos": [
         {
-            "repo": "/path/to/local/repo",
+            "path": "/path/to/local/repo",
             "exec": "echo 'Shell command to evoke after update'"
         },
         {
-            "repo": "/path/to/another/repo",
+            "path": "/path/to/another/repo",
             "exec": "echo 'Shell command to evoke after update'"
         }
     ]
