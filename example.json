@@ -1,7 +1,7 @@
 {
     "repos": [
         {
-            "repo": "/home/nic/git_repos/p6-git-updater",
+            "path": "/home/nic/programs/p6-git-updater",
             "exec": "echo 'Shell command to evoke after update'"
         }
     ]

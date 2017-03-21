@@ -38,6 +38,6 @@ sub load-config() is export {
 
 sub get-repos() is export {
     gather {
-        take $_<repo>.IO for load-config<repos>.List
+        take $_<path>.IO for load-config<repos>.List
     }.cache;
 }

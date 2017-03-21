@@ -1,32 +1,31 @@
 
 use Hiker::Model;
 use Git::Wrapper;
-use lib 'lib';
-use Utils;
+use Config::From 'repos.json';
 
 #Update one of the git repos.
 class Model::Update does Hiker::Model {
     method bind($req, $res) {
         #Look for the repo to update.
         my $search = $req.params<project>;
-        my @repos = get-repos.grep: /:i $search /;
+        my @repos is from-config;
+        my %repo = @repos.grep(*<path>.IO.basename.lc eq $search.lc).first;
 
-        #Unless one repo returns, return an error.
-        unless @repos.elems == 1 {
-            $res.data<name> = $search;
-            $res.data<error> = @repos.elems > 1
-                ?? "Too many repos match that name"
-                !! "No repos match that name";
-            $res.status = 404;
-            return;
-        }
-
-        $res.data<name> = @repos.first.basename;
+        $res.data<name> = %repo<path>.IO.basename;
         start {
-            #Looks like we found the right repo to update.
-            my $git = Git::Wrapper.new: gitdir => @repos.first;
+            my $git = Git::Wrapper.new: gitdir => %repo<path>;
             #Pull from the origin.
             $git.pull;
+            run |%repo<exec>;
+        }
+
+        CATCH {
+            default {
+                $res.data<name> = $search;
+                $res.data<error> = "Repo not found";
+                $res.status = 404;
+                return;
+            }
         }
     }
 }

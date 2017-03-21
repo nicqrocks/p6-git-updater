@@ -1,13 +1,16 @@
 
 use Hiker::Model;
 use Git::Wrapper;
-use lib 'lib';
-use Utils;
+use Config::From 'repos.json';
 
 #Have a general overview of the git repos.
 class Model::Overview does Hiker::Model {
     method bind($req, $res) {
-        for get-repos() -> $repo {
+        #Import from the config.
+        my @repos is from-config;
+
+        #Loop through each path
+        for @repos.map(*<path>.IO) -> $repo {
             #Wrap git around the given dir.
             my $git = Git::Wrapper.new: gitdir => $repo;
             #Hash to store the projects data.
