@@ -11,7 +11,7 @@ To accomplish this, a config file called `repos.json` will define the local repo
 
 ## Configuration
 
-The `repos.json` file must be configured in the following manner:
+When cloning or downloading this repo, you will find a file called `example.json`. This file is an example config that should be edited to your liking and renamed to `repos.json`. The `repos.json` file must be configured in the following manner:
 
 ```
 {
