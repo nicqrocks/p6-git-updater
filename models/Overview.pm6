@@ -11,6 +11,12 @@ class Model::Overview does Hiker::Model {
 
         #Loop through each path
         for @repos.map(*<path>.IO) -> $repo {
+            #Make sure that the path given exists.
+            unless $repo.e {
+                note "`$repo` is not a valid path";
+                next;
+            }
+
             #Wrap git around the given dir.
             my $git = Git::Wrapper.new: gitdir => $repo;
             #Hash to store the projects data.
