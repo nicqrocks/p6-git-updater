@@ -1,8 +1,10 @@
 {
-    "repos": [
-        {
-            "path": "/home/nic/programs/p6-git-updater",
-            "exec": "echo 'Shell command to evoke after update'"
-        }
-    ]
+   "host": "localhost",
+   "port": 8080,
+   "repos": [
+      {
+         "path": "/home/nic/programs/p6-git-updater",
+         "exec": "echo 'Shell command to evoke after update'"
+      }
+   ]
 }

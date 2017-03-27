@@ -15,15 +15,17 @@ When cloning or downloading this repo, you will find a file called `example.json
 
 ```
 {
-    "repos": [
-        {
-            "path": "/path/to/local/repo",
-            "exec": "echo 'Shell command to evoke after update'"
-        },
-        {
-            "path": "/path/to/another/repo",
-            "exec": "echo 'Shell command to evoke after update'"
-        }
-    ]
+   "host": "hostname",
+   "port": 80,
+   "repos": [
+      {
+         "path": "/path/to/local/repo",
+         "exec": "echo 'Shell command to evoke after update'"
+      },
+      {
+         "path": "/path/to/another/repo",
+         "exec": "echo 'Shell command to evoke after update'"
+      }
+   ]
 }
 ```
