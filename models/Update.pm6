@@ -19,7 +19,7 @@ class Model::Update does Hiker::Model {
             #so that they can be pulled later.
             $git.stash unless $git.status ~~ /"directory clean"/;
             $git.pull;
-            $git.stash "apply";
+            $git.stash: "apply";
             #Run the command given in the git repo's dir.
             shell %repo<exec>.Str, cwd => $git.gitdir;
             CATCH { default { note $_ } }
