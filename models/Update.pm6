@@ -10,13 +10,13 @@ class Model::Update does Hiker::Model {
         my $search = $req.params<project>;
         my @repos is from-config;
         my %repo = @repos.grep(*<path>.IO.basename.lc eq $search.lc).first;
-
         $res.data<name> = %repo<path>.IO.basename;
+
         start {
             my $git = Git::Wrapper.new: gitdir => %repo<path>;
-            #Pull from the origin.
             $git.pull;
-            run |%repo<exec>;
+            shell %repo<exec>.Str, cwd => $git.gitdir;
+            CATCH { default { note $_ } }
         }
 
         CATCH {
@@ -24,6 +24,7 @@ class Model::Update does Hiker::Model {
                 $res.data<name> = $search;
                 $res.data<error> = "Repo not found";
                 $res.status = 404;
+                note $_;
                 return;
             }
         }
