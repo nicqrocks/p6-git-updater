@@ -13,17 +13,15 @@ class Model::Update does Hiker::Model {
         my %repo = @repos.grep(*<path>.IO.basename.lc eq $search.lc).first;
         $res.data<name> = %repo<path>.IO.basename;
 
-        start {
-            my $git = Git::Wrapper.new: gitdir => %repo<path>;
-            #Check if any changes have been made since last pull, and stash them
-            #so that they can be pulled later.
-            $git.stash unless $git.status ~~ /"directory clean"/;
-            $git.pull;
-            $git.stash: "apply";
-            #Run the command given in the git repo's dir.
-            shell %repo<exec>.Str, cwd => $git.gitdir;
-            CATCH { default { note $_ } }
-        }
+        my $git = Git::Wrapper.new: gitdir => %repo<path>;
+        #Check if any changes have been made since last pull, and stash them
+        #so that they can be pulled later.
+        $git.stash unless $git.status ~~ /"directory clean"/;
+        $git.pull;
+        $git.stash: "apply";
+        #Run the command given in the git repo's dir.
+        shell %repo<exec>.Str, cwd => $git.gitdir;
+        CATCH { default { note $_ } }
 
         CATCH {
             default {
