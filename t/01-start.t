@@ -1,0 +1,39 @@
+
+#This file should test if the system starts up properly.
+
+use Test;
+use Hiker;
+
+plan 2;
+
+#Start the server.
+my $app = Hiker.new(
+    hikes     => ['controllers', 'models'],
+    templates => 'templates',
+    host      => "localhost",
+    port      => 8888
+);
+my $srv = $app.listen;
+sleep 2;
+
+#Make a sub to talk to the server with.
+sub get(Str $req) {
+    my $con = IO::Socket::INET.new: host => "localhost", port => 8888;
+    my Str $res = "";
+    $con.print: $req;
+    sleep .5;
+    while my $d = $con.recv { $res ~= $d }
+    CATCH { default { fail $_.gist; } }
+    try {
+        $con.close;
+        CATCH { default { fail "Could not close socket." } }
+    }
+    return $res;
+}
+
+#Check that the server and it's connections are ok.
+ok $srv.status ~~ Planned|Kept, "Server status";
+ok get("GET / HTTP/1.0\n") ~~ /"Git Updater"/,
+    "Talking to main page";
+
+done-testing;
