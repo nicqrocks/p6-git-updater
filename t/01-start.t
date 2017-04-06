@@ -4,7 +4,7 @@
 use Test;
 use Hiker;
 
-plan 2;
+plan 4;
 
 #Make sure that there is a `repos.json` file.
 try {
@@ -42,7 +42,11 @@ sub get(Str $req) {
 
 #Check that the server and it's connections are ok.
 ok $srv.status ~~ Planned|Kept, "Server status";
-ok get("GET / HTTP/1.0\n") ~~ /"Git Updater"/,
+ok get("GET / HTTP/1.0\n") ~~ /"Repo: " \S+ "<\/h2>"/,
     "Talking to main page";
+ok get("GET /style.css HTTP/1.0\n") ~~ /"div"/,
+    "Talking to CSS page";
+ok get("GET /update/does-not-exist HTTP/1.0\n") ~~ /"Error: "/,
+    "Talking to bad update page";
 
 done-testing;
