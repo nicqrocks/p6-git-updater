@@ -6,6 +6,15 @@ use Hiker;
 
 plan 2;
 
+#Make sure that there is a `repos.json` file.
+try {
+    copy("example.json", "repos.json", :createonly);
+    use JSON::Fast;
+    my $conf = from-json slurp("repos.json");
+    $conf<repos>[0]<path> = $*CWD.Str;
+    spurt "repos.json".IO, to-json($conf);
+}
+
 #Start the server.
 my $app = Hiker.new(
     hikes     => ['controllers', 'models'],
