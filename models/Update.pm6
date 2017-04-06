@@ -21,7 +21,6 @@ class Model::Update does Hiker::Model {
         $git.stash: "apply";
         #Run the command given in the git repo's dir.
         shell %repo<exec>.Str, cwd => $git.gitdir;
-        CATCH { default { note $_ } }
 
         CATCH {
             default {
