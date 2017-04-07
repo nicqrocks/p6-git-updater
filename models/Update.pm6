@@ -10,12 +10,14 @@ class Model::Update does Hiker::Model {
         my @repos is from-config;
 
         #Search through the configs for a repo that matches the query.
-        my %repo = @repos.grep(*<path>.IO.basename.lc eq $search.lc).first;
+        my %repo;
+        try { %repo = @repos.grep(*<path>.IO.basename.lc eq $search.lc).first; }
+        die "Repo '$search' not found" unless %repo;
         $res.data<name> = %repo<path>.IO.basename;
 
         my $git = Git::Wrapper.new: gitdir => %repo<path>;
         #Check if any changes have been made since last pull.
-        fail "Git repo is not clean!" unless $git.status ~~ /"directory clean"/;
+        die "Git repo is not clean!" unless $git.status ~~ /"directory clean"/;
         $git.pull;
         #Run the command given in the git repo's dir.
         shell %repo<exec>.Str, cwd => $git.gitdir;
@@ -23,7 +25,7 @@ class Model::Update does Hiker::Model {
         CATCH {
             default {
                 $res.data<name> = $search;
-                $res.data<error> = "Repo not found";
+                $res.data<error> = $_.Str;
                 $res.status = 404;
                 note $_;
                 return;
