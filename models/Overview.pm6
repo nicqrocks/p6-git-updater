@@ -39,7 +39,8 @@ class Model::Overview does Hiker::Model {
             given $git.log(:max-count(1)).first {
                 %proj<commit> = .sha1;
                 %proj<author> = .author;
-                %proj<message> = .date ~ " => " ~  .message.chomp;
+                my $date = "{.date.yyyy-mm-dd} {.date.hour}:{.date.minute}";
+                %proj<message> = "$date => " ~  .message.chomp;
             }
 
             #Get the origin URL if it exists.
