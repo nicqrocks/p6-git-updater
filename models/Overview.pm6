@@ -39,7 +39,8 @@ class Model::Overview does Hiker::Model {
             given $git.log(:max-count(1)).first {
                 %proj<commit> = .sha1;
                 %proj<author> = .author;
-                my $date = "{.date.yyyy-mm-dd} {.date.hour}:{.date.minute}";
+                my $date = sprintf "%04i-%02i-%02i %02i:%02i",
+                	 .year, .month, .day, .hour, .minute given .date;
                 %proj<message> = "$date => " ~  .message.chomp;
             }
 
