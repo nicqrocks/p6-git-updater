@@ -29,3 +29,10 @@ When cloning or downloading this repo, you will find a file called `example.json
    ]
 }
 ```
+
+## Needed Modules
+
+The following modules are needed:
+- Hiker
+- Config::From
+- Git::Wrapper
